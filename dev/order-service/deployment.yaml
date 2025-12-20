@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: order-service
+  name: order-service
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: order-service
+        trickdeploy: trickdeploy1
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: TZ
+          value: Asia/Ho_Chi_Minh
+        image: docker.io/<dockerhub_user>/<app>:1.0.0 # {"$imagepolicy": "flux-system:app-policy"}
+        imagePullPolicy: Always
+        name: order-service
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 15m
+        volumeMounts:
+        - mountPath: /app/appsettings.secrets.json
+          name: order-service-secrets
+          subPath: appsettings.secrets.json
+          readOnly: true
+      volumes:
+      - name: order-service-secrets
+        secret:
+          secretName: order-service-secrets
