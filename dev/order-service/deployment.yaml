@@ -27,7 +27,7 @@ spec:
           value: Production
         - name: TZ
           value: Asia/Ho_Chi_Minh
-        image: docker.io/quockidang1/order-service:fc2f616 # {"$imagepolicy": "flux-system:order-service-policy"}
+        image: docker.io/quockidang1/order-service:20251221033619 # {"$imagepolicy": "flux-system:order-service-policy"}
         imagePullPolicy: Always
         name: order-service
         ports:
