@@ -1,0 +1,47 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: order-service-image-update
+  namespace: flux-system
+spec:
+  image: docker.io/quockidang1/order-service
+  interval: 1m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: app-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: order-service
+  policy:
+    alphabetical:
+      order: asc
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: order-service-image-update
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        name: flux-bot
+        email: flux-bot@users.noreply.github.com
+      messageTemplate: "chore: update image to {{range .Updated.Images}}{{.}}{{end}}"
+    push:
+      branch: main
+  update:
+    path: ./dev/order-service
+    strategy: Setters
