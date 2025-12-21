@@ -1,7 +1,7 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
 metadata:
-  name: order-service-image-update
+  name: order-service-repo
   namespace: flux-system
 spec:
   image: docker.io/quockidang1/order-service
@@ -11,11 +11,11 @@ spec:
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImagePolicy
 metadata:
-  name: app-policy
+  name: order-service-policy 
   namespace: flux-system
 spec:
   imageRepositoryRef:
-    name: order-service
+    name: order-service-repo
   policy:
     alphabetical:
       order: asc
