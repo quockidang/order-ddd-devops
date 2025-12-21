@@ -4,17 +4,15 @@ metadata:
   name: app
   namespace: argocd
 spec:
-  project: default
+  project: dev
   source:
-    repoURL: https://github.com/<org>/<repo>.git
+    repoURL: https://github.com/quockidang/order-ddd-devops.git
     targetRevision: main
     path: k8s
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: dev
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
